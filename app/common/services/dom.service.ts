@@ -1,0 +1,101 @@
+import * as _ from 'lodash';
+
+export default class DomService {
+  static siblings(el) {
+    return [].filter.call(el.parentNode.children, function(child) {
+      return child !== el;
+    });
+  }
+
+  static closest(el, selector) {
+    var matchesSelector;
+    matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
+    while (el) {
+      if (matchesSelector.call(el, selector)) {
+        return el;
+      } else {
+        el = el.parentElement;
+      }
+    }
+    return null;
+  }
+
+  static parentsUntil(el, selector, filter) {
+    var matchesSelector, result;
+    result = [];
+    matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
+    el = el.parentElement;
+    while (el && !matchesSelector.call(el, selector)) {
+      if (!filter) {
+        result.push(el);
+      } else {
+        if (matchesSelector.call(el, filter)) {
+          result.push(el);
+        }
+      }
+      el = el.parentElement;
+    }
+    return result;
+  }
+
+  static findChild(el, func){
+    if (!el) {
+      return null;
+    }
+
+    let children = el.children;
+    let e = _.find(children, (d)=>func(d));
+    if (e){
+      return e;
+    } else {
+      for (let child of children){
+        let find = DomService.findChild(child, func);
+        if (find) {
+          return find;
+        }
+      }
+    }
+  }
+
+  static getWidth(el) {
+    return Math.max(el.clientWidth, el.offsetWidth, el.scrollWidth);
+  }
+
+  static getHeight(el) {
+    var borderBottomWidth, borderTopWidth, height, paddingBottom, paddingTop, styles;
+    styles = window.getComputedStyle(el);
+    height = el.offsetHeight;
+    borderTopWidth = parseFloat(styles.borderTopWidth);
+    borderBottomWidth = parseFloat(styles.borderBottomWidth);
+    paddingTop = parseFloat(styles.paddingTop);
+    paddingBottom = parseFloat(styles.paddingBottom);
+    return height - borderBottomWidth - borderTopWidth - paddingTop - paddingBottom;
+  }
+
+  static scrollTop(val) {
+    var container;
+    if (document.documentElement && document.documentElement.scrollTop) {
+      container = document.documentElement;
+    } else {
+      container = document.body;
+    }
+    if (val) {
+      container.scrollTop = val;
+    } else {
+      return container.scrollTop;
+    }
+  }
+
+  static trigger(el, eventName, data) {
+    var event;
+    if ("CustomEvent" in window) {
+      event = new CustomEvent(eventName, {
+        detail: data
+      });
+    } else {
+      event = document.createEvent('CustomEvent');
+      event.initCustomEvent(eventName, true, true, data);
+    }
+    return el.dispatchEvent(event);
+  }
+}
