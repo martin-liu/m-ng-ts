@@ -1,5 +1,6 @@
 export const config = {
   name: "app",
+  title: "My App",
   uri: {
     base: "/",
     host: "/",
