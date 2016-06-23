@@ -40,6 +40,10 @@ var webpackConfig = {
     extensions: ['', '.webpack.js', '.web.js', '.ts', '.js']
   },
 
+  node: {
+    fs: "empty"
+  },
+
   module: {
 
     preloaders: [
@@ -92,10 +96,6 @@ var webpackConfig = {
 
   postcss: function() {
     return [autoprefixer];
-  },
-
-  node: {
-    fs: "empty"
   },
 
   plugins: [
