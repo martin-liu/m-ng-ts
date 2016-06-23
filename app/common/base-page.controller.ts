@@ -13,7 +13,6 @@ export default class BasePageController {
   constructor(){
     this.state = {};
     this.data = {};
-    this.actions = this.bindAction();
 
     BootstrapService.promise.then( () => {
       let $injector = angular.element(document).injector();
@@ -37,7 +36,6 @@ export default class BasePageController {
   }
 
   bindView(){}
-  bindAction(){}
 
   pageInit($scope){
     return new Promise( (resolve) => {

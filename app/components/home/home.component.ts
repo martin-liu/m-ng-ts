@@ -11,6 +11,7 @@ class HomePageController extends BasePageController {
   }
 
   bindView(){
+    this.data.num = 1;
     this.$timeout(()=>{
       this.state.dataLoaded = true;
       this.data.test = 'this is a test';
@@ -22,6 +23,10 @@ class HomePageController extends BasePageController {
       }, (err) => {
         console.log(err)
       });
+  }
+
+  doSomething(){
+    this.data.num += 1;
   }
 }
 

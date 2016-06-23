@@ -1,4 +1,8 @@
 <m-loading ng-if="!vm.state.dataLoaded"></m-loading>
 <div ng-if="vm.state.dataLoaded">
   {{vm.data.test}}
+  <br/>
+  Counter: {{vm.data.num}}
+  <a class="btn btn-primary" href=""
+     ng-click="vm.doSomething()">Click</a>
 </div>
