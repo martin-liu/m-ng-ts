@@ -60,7 +60,7 @@ var webpackConfig = {
       },
       {
         test: /\.ts$/,
-        loader: 'awesome-typescript-loader'
+        loader: 'ts-loader'
       },
       {
         test: /\.scss$/,
@@ -75,8 +75,8 @@ var webpackConfig = {
         loader: 'file'
       },
       {
-        test: /\.ts$/,
-        loader: StringReplacePlugin.replace(['awesome-typescript-loader'], {
+        test: /app\/common\/config\.ts$/,
+        loader: StringReplacePlugin.replace({
           replacements: [
             {
               pattern: /__CONFIG_FILE__/ig,
@@ -121,9 +121,9 @@ var webpackConfig = {
 if (env == 'prod') {
   webpackConfig.plugins = webpackConfig.plugins.concat([
     new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }})
+    compress: {
+      warnings: false
+    }})
   ]);
 }
 

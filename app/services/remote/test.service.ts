@@ -1,6 +1,7 @@
+import {Config} from '../../common/config.ts';
 import BaseRemoteService from '../../common/remote.service.ts';
 
-export default class TestRemoteService extends BaseRemoteService {
+class TestRemoteService extends BaseRemoteService {
   getRest(Restangular) {
     return Restangular.all('test');
   }
@@ -13,3 +14,6 @@ export default class TestRemoteService extends BaseRemoteService {
     return this.doQueryWithCache('test', param, null, timeout);
   }
 }
+
+angular.module(Config.name)
+  .service('TestRemoteService', TestRemoteService);

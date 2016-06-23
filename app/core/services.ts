@@ -1,6 +1,5 @@
-import {Config} from '../common/config.ts';
 import '../common/services/module.ts';
-import TestRemoteService from '../services/remote/test.service.ts';
 
-angular.module(Config.name)
-  .service('TestRemoteService', TestRemoteService);
+declare var require:any;
+let req = require.context('../services', true, /^.*\.service\.ts$/igm);
+req.keys().forEach(req);

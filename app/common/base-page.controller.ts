@@ -18,7 +18,7 @@ export default class BasePageController {
     BootstrapService.promise.then( () => {
       let $injector = angular.element(document).injector();
       let $rootScope = $injector.get('$rootScope');
-      let AppInitService = $injector.get('AppInitService');
+      let AppInitService:any = $injector.get('AppInitService');
       // Bind viewModel to view after page init
       AppInitService.done().then(()=> {
         this.pageInit($rootScope).then( () => {

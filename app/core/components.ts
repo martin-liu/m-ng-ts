@@ -1,4 +1,5 @@
 import '../common/components/module.ts';
-import RequireService from '../common/services/require.service.ts';
 
-RequireService.requireFolder('../components', /^.*\.component\.ts$/igm)
+declare var require:any;
+let req = require.context('../components', true, /^.*\.component\.ts$/igm);
+req.keys().forEach(req);
