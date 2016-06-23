@@ -6,8 +6,14 @@ class HeaderController {
   constructor(private $rootScope, private Util, private Config){}
 }
 
+const binding:{[bindngs: string]: string} = {
+  mailto: BindingType.VALUE,
+  wiki: BindingType.VALUE
+};
+
 export default class GradientComponent extends BaseComponent {
 
+  public bindings = binding;
   public controller = HeaderController;
 
   public template = `
@@ -28,11 +34,11 @@ export default class GradientComponent extends BaseComponent {
           </ul>
           <div class="nav nav-pills pull-right" style="margin-right:20px">
             <li>
-              <a style="color: #999" href="mailto:">
+              <a style="color: #999" ng-href="{{vm.mailto}}">
                 <i class="fa fa-envelope"></i></a>
             </li>
             <li>
-              <a style="color: #999" href="" target="_blank">
+              <a style="color: #999" ng-href="{{vm.wiki}}" target="_blank">
                 <i class="fa fa-question-circle"></i>
               </a>
             </li>
