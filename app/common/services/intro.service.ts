@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import {Config} from '../config.ts';
 import Cache from '../../common/services/cache.service.ts';
-const introJs = require('intro.js');
+const introJs = require('intro.js').introJs;
 
 export default new class IntroService {
   private static intro;
@@ -14,7 +14,7 @@ export default new class IntroService {
   private initIntro() {
     let steps = Config.intros;
 
-    let els = document.querySelectorAll('.intro-step');
+    let els = document.querySelectorAll('[intro-step]');
     steps = _.map(steps, (step:any, i) => {
       let findEl = _.find(els, (el) => {
         let e = angular.element(el);
