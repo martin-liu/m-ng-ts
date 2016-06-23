@@ -25,6 +25,7 @@ It's using **webpack-dev-server**, will auto compile files and reload page.
 ## How it works
 
 ### Structure
+```
 ├── app
 │   ├── common
 │   │   ├── components
@@ -38,6 +39,7 @@ It's using **webpack-dev-server**, will auto compile files and reload page.
 │   ├── lib
 │   └── services
 │       └── remote
+```
 
 ### Details
 1. Entry: `app/core/bootstrap.ts`.
