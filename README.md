@@ -13,6 +13,7 @@ git pull bp master
 
 Note:
 You can use `git config --global url."https://".insteadOf git://` to solve possible network issue
+**For Windows User**, prefer use `cmd` rather than `git bash`, please switch to `cmd` if `git bash` not work well(you may need remove node_modules and run `npm run setup` again).
 
 ## Development
 Run `npm start`, this will start a web server on http://localhost:8888
