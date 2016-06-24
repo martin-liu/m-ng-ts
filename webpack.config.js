@@ -79,7 +79,7 @@ var webpackConfig = {
         loader: 'file'
       },
       {
-        test: /app\/common\/config\.ts$/,
+        test: require.resolve("./app/common/config.ts"),
         loader: StringReplacePlugin.replace({
           replacements: [
             {
