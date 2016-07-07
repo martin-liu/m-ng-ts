@@ -4,7 +4,7 @@
   "description": "Angular 1.5 & Typescript",
   "main": "app.js",
   "scripts": {
-    "start": "webpack-dev-server --content-base app/ --progress --colors --inline --hot --compress --port 8888",
+    "start": "webpack-dev-server --content-base app/ --progress --colors --inline --hot --compress --history-api-fallback --port 8888",
     "setup": "npm install && typings install && gulp init",
     "clean-docs": "rimraf docs/**/*",
     "clean-build": "rimraf build/**/*",
