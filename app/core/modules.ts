@@ -1,18 +1,23 @@
 import * as angular from 'angular';
 import * as uiBootstrap from 'angular-ui-bootstrap';
-const ngSanitize = require('angular-sanitize');
 import * as _ from 'lodash';
 import {Config} from '../common/config.ts';
 import BootstrapService from '../common/services/bootstrap.service.ts';
 import Cache from '../common/services/cache.service.ts';
 import './config.ts';
 import 'restangular';
+
+const ngSanitize = require('angular-sanitize');
+const highcharts = require('highcharts');
+const highchartsNg = require('highcharts-ng');
+
 declare var locache:any;
 
-angular.module(Config.name, [ngSanitize, 'config', uiBootstrap, 'restangular'])
+angular.module(Config.name, [ngSanitize, 'config', uiBootstrap, 'restangular', highchartsNg])
   .constant('Cache', Cache)
   .constant('_', _)
   .config(($provide, $httpProvider, RestangularProvider) => {
+
     // Restangular base url
     RestangularProvider.setBaseUrl(Config.uri.api);
 
@@ -32,7 +37,10 @@ angular.module(Config.name, [ngSanitize, 'config', uiBootstrap, 'restangular'])
       };
     });
   })
-  .run( (AppInitService) => {
+  .run( ($window, AppInitService) => {
+    // setup Highcharts
+    $window.Highcharts = highcharts;
+
     BootstrapService.resolve();
     AppInitService.init();
   });

@@ -26,8 +26,8 @@ var webpackConfig = {
 
   entry: {
     app: './app/core/bootstrap.ts',
-    vendor: ['angular', 'angular-route', 'angular-sanitize', 'angular-ui-bootstrap',
-             'lodash', 'restangular', 'nprogress', 'intro.js', './app/lib/locache.js',
+    vendor: ['angular', 'angular-route', 'angular-sanitize', 'angular-ui-bootstrap', 'highcharts',
+             'highcharts-ng', 'lodash', 'restangular', 'nprogress', 'intro.js', './app/lib/locache.js',
              'bootstrap-loader', './app/lib/lib.scss']
   },
 
