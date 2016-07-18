@@ -4,7 +4,8 @@ var webpack = require('webpack'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     autoprefixer = require('autoprefixer'),
     ngAnnotatePlugin = require('ng-annotate-webpack-plugin'),
-    StringReplacePlugin = require('string-replace-webpack-plugin');
+    StringReplacePlugin = require('string-replace-webpack-plugin'),
+    CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // env based config file
 var arg = process.argv[2];
@@ -60,7 +61,7 @@ var webpackConfig = {
       },
       {
         test: /\.html$/,
-        loader: 'raw'
+        loader: 'html-loader'
       },
       {
         test: /\.ts$/,
@@ -114,7 +115,13 @@ var webpackConfig = {
       template: './app/index.html',
       inject: true,
       hash: true
-    })
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: './app/assets',
+        to: 'assets'
+      }
+    ])
   ]
 };
 

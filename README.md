@@ -28,6 +28,7 @@ It's using **webpack-dev-server**, will auto compile files and reload page.
 ### Structure
 ```
 ├── app
+│   ├── assets
 │   ├── common
 │   │   ├── components
 │   │   ├── partials
@@ -48,3 +49,11 @@ It's using **webpack-dev-server**, will auto compile files and reload page.
 3. `app/config/routes.ts` is route config, it will be used to bind route with components
 4. `app/config/intro.ts` is for [intro.js](https://github.com/usablica/intro.js)
 5. All common components and services are located in `app/common` folder
+6. Add your code in `app/components` and `app/services`
+
+
+## Note
+* You can add 3rd party libraries in `app/core/modules.ts`
+* For assets like images or other assets
+  + Global assets, you can put it in `app/assets`
+  + Component assets, you just put it in component folder, and reference it by **relative path** in you html file
