@@ -23,7 +23,7 @@ export default class BaseRemoteService {
 
   // Session cache
   getWithCache(method, param, func, timeout = 300) {
-    this.Util.getWithCache(this.getCacheKey(method, param), true, func, timeout);
+    return this.Util.getWithCache(this.getCacheKey(method, param), true, func, timeout);
   }
 
   doQuery(method, param, canceler?) {
