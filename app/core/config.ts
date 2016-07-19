@@ -23,7 +23,7 @@ angular.module("config", [ngRoute])
         // convert `ngModel` style to `ng-model` style
         let tag = route.component.replace(/([A-Z])/g, '-$1').toLowerCase();
         tag = _.trim(tag, '-');
-        route.params.template = `<${tag}></${tag}>`;
+        route.params.template = `<${tag} component="${route.component}"></${tag}>`;
       }
       $routeProvider.when(route.url, route.params);
     });
