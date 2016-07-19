@@ -2,9 +2,9 @@ import {Config} from './config.ts';
 
 export default class BaseRemoteService {
   static $inject = ['Restangular', 'Util', '$q', '$timeout'];
-  private rest;
+  protected rest;
 
-  constructor(private Restangular, private Util, private $q, private $timeout){
+  constructor(protected Restangular, protected Util, protected $q, protected $timeout){
     this.rest = this.getRest(Restangular);
   }
 
