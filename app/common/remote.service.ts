@@ -36,7 +36,7 @@ export default class BaseRemoteService {
   }
 
   doQueryWithCache(method, param, canceler = null, timeout = 300){
-    this.getWithCache(method, param, () => {
+    return this.getWithCache(method, param, () => {
       if (canceler && canceler.promise) {
         let config = {timeout: canceler.promise};
         return this.rest.one(method).withHttpConfig(config).get(param);
