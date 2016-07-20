@@ -1,10 +1,10 @@
 import {Config} from './config.ts';
 
 export default class BaseRemoteService {
-  static $inject = ['Restangular', 'Util', '$timeout'];
+  static $inject = ['Restangular', 'Util', '$q', '$timeout'];
   protected rest;
 
-  constructor(protected Restangular, protected Util, protected $timeout){
+  constructor(protected Restangular, protected Util, protected $q, protected $timeout){
     this.rest = this.getRest(Restangular);
   }
 
@@ -47,10 +47,11 @@ export default class BaseRemoteService {
   }
 
   mockResult(data, time = 1000){
-    return new Promise((resolve, reject) => {
-      this.$timeout(()=> {
-        resolve(data);
-      }, time);
-    });
+    let defer = this.$q.defer();
+    this.$timeout(()=> {
+      defer.resolve(data);
+    }, time);
+
+    return defer.promise;
   }
 }

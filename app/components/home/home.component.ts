@@ -24,8 +24,7 @@ class HomePageController extends BasePageController {
     this.TestRemoteService.testMethod({a: 'haha'})
       .then((data) => {
         console.log(data);
-      })
-      .catch((err) => {
+      }, (err) => {
         console.log(err)
       });
   }

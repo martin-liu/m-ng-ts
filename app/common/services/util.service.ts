@@ -2,13 +2,13 @@ import DomService from './dom.service.ts';
 
 export default class Util {
   static $inject = ['$uibModal', '$timeout', '$location', '$anchorScroll', '$window',
-                    '$http', '$templateCache', '$compile', '$route', 'Cache'];
+                    '$http', '$templateCache', '$compile', '$q', '$route', 'Cache'];
   private alertTpl = require('../partials/alert.html');
   dom:any;
 
   constructor(private $uibModal:any, private $timeout:any, private $location:any, private $anchorScroll:any,
               private $window:any, private $http:any, private $templateCache:any,
-              private $compile:any, private $route:any, private Cache:any) {
+              private $compile:any, private $q:any, private $route:any, private Cache:any) {
     this.dom = DomService;
   }
 
@@ -84,15 +84,15 @@ export default class Util {
   }
 
   compileTemplate(templateUrl, scope) {
-    let loader;
-    return new Promise((resolve, reject) => {
-      loader = this.$http.get(templateUrl, {
-        cache: this.$templateCache
-      });
-      loader.success(function(html) {
-        return resolve(this.$compile(html)(scope));
-      });
+    let defer, loader;
+    defer = this.$q.defer();
+    loader = this.$http.get(templateUrl, {
+      cache: this.$templateCache
     });
+    loader.success(function(html) {
+      return defer.resolve(this.$compile(html)(scope));
+    });
+    return defer.promise;
   }
 
   toggleFullscreen(e) {
@@ -193,29 +193,29 @@ export default class Util {
   }
 
   getWithCache(key, isSession, getFunc, timeout) {
-    let cache = this.Cache;
+    let cache, data, defer, promise;
+    cache = this.Cache;
     if (isSession) {
       cache = this.Cache.session;
     }
-    let data = cache.get(key);
-
-    return new Promise((resolve, reject) => {
-      if (data) {
-        resolve(data);
-      } else {
-        getFunc().then(function(data) {
-          let e;
-          try {
-            cache.set(key, data, timeout);
-          } catch (_error) {
-            e = _error;
-            console.log(e);
-          } finally {
-            resolve(data);
-          }
-        });
-      }
-    });
+    defer = this.$q.defer();
+    data = cache.get(key);
+    if (data) {
+      defer.resolve(data);
+      return defer.promise;
+    } else {
+      promise = getFunc();
+      promise.then(function(data) {
+        let e;
+        try {
+          return cache.set(key, data, timeout);
+        } catch (_error) {
+          e = _error;
+          return console.log(e);
+        }
+      });
+      return promise;
+    }
   }
 
   capitalize(str) {
@@ -230,45 +230,67 @@ export default class Util {
     return str.replace(/<[^>]*>?/g, '');
   }
 
-  waitUntil(func, check, interval = 300, maxTime = 100) {
-    let doWait = (time) => {
-      return new Promise((resolve, reject) => {
-        if (time <= 0) {
-          reject("exceed " + maxTime + " times check");
+  waitUntil(func, check, interval, maxTime) {
+    let doWait;
+    if (interval == null) {
+      interval = 300;
+    }
+    if (maxTime == null) {
+      maxTime = 100;
+    }
+    doWait = function(time) {
+      let defer, ret;
+      defer = this.$q.defer();
+      if (time <= 0) {
+        defer.reject("exceed " + maxTime + " times check");
+      } else {
+        ret = func();
+        if (check(ret)) {
+          defer.resolve(ret);
         } else {
-          let ret = func();
-          if (check(ret)) {
-            resolve(ret);
-          } else {
-            this.$timeout(() => {
-              doWait(time - 1).then(resolve).catch(reject);
-            }, interval);
-          }
+          this.$timeout((function(_this) {
+            return function() {
+              return doWait(time - 1).then(function(ret) {
+                return defer.resolve(ret);
+              }, function(err) {
+                return defer.reject(err);
+              });
+            };
+          })(this), interval);
         }
-      });
+      }
+      return defer.promise;
     };
     return doWait(maxTime);
   }
 
-  recurUntil(func, check, args, nextArgsFunc, maxTime = 100) {
-    let doRecur = (time, lastRet?) => {
-      return new Promise((resolve, reject) => {
+  recurUntil(func, check, args, nextArgsFunc, maxTime) {
+    let doRecur;
+    if (maxTime == null) {
+      maxTime = 100;
+    }
+    doRecur = function(time, lastRet) {
+      let defer, ret;
+      defer = this.$q.defer();
       if (time <= 0) {
-        reject("exceed " + maxTime + " times check");
+        defer.reject("exceed " + maxTime + " times check");
       } else {
-        let ret;
         if (time === maxTime) {
           ret = func.apply(this, args);
         } else {
           ret = func.apply(this, nextArgsFunc(lastRet));
         }
         if (check(ret)) {
-          resolve(ret);
+          defer.resolve(ret);
         } else {
-          doRecur(time - 1, ret).then(resolve).catch(reject);
+          doRecur(time - 1, ret).then(function(ret) {
+            return defer.resolve(ret);
+          }, function(err) {
+            return defer.reject(err);
+          });
         }
       }
-      });
+      return defer.promise;
     };
     return doRecur(maxTime);
   }
