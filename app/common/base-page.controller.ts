@@ -9,6 +9,9 @@ export default class BasePageController {
   state: any;
   data: any;
   actions: any;
+  protected Util:any;
+  protected config:any;
+  protected dict:any;
 
   constructor(){
     this.state = {};
@@ -17,6 +20,10 @@ export default class BasePageController {
     BootstrapService.promise.then( () => {
       let $injector = angular.element(document).injector();
       let $rootScope = $injector.get('$rootScope');
+      this.Util = $rootScope.Util;
+      this.config = $rootScope.config;
+      this.dict = $rootScope.dict;
+
       let AppInitService:any = $injector.get('AppInitService');
       // Bind viewModel to view after page init
       AppInitService.done().then(()=> {
