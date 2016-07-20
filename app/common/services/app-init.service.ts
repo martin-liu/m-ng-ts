@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import IntroService from './intro.service.ts';
 
 export default class AppInitService {
@@ -76,6 +77,7 @@ export default class AppInitService {
 
     this.$rootScope.dict = {
       get : (key) => {
+        key = _.trim(key);
         let ret = this.Constant.dict[key] || key;
         return ret;
       }
