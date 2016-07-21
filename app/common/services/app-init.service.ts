@@ -39,7 +39,7 @@ export default class AppInitService {
           localStorage.setItem('user', JSON.stringify(user));
         }
         return defer.resolve();
-      });
+      }, (e) => defer.resolve());
     } else {
       defer.resolve();
     }
