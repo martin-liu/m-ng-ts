@@ -9,10 +9,9 @@ export default class BasePageController {
   state: any;
   data: any;
   actions: any;
-
-  Util:any;
-  config:any;
-  dict:any;
+  protected Util:any;
+  protected config:any;
+  protected dict:any;
 
   constructor(){
     this.state = {};
@@ -20,7 +19,7 @@ export default class BasePageController {
 
     BootstrapService.promise.then( () => {
       let $injector = angular.element(document).injector();
-      let $rootScope:any = $injector.get('$rootScope');
+      let $rootScope = $injector.get('$rootScope');
       this.Util = $rootScope.Util;
       this.config = $rootScope.config;
       this.dict = $rootScope.dict;
