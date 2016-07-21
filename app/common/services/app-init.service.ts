@@ -41,14 +41,14 @@ export default class AppInitService {
         return defer.resolve();
       });
     } else {
-      defer.resolve()
+      defer.resolve();
     }
-    return defer.promise
+    return defer.promise;
   }
 
   public setupPersistence (obj, cache) {
     let defer = this.$q.defer();
-    this.promises.push(defer);
+    this.promises.push(defer.promise);
     // Wach to persist object in local/session storage
     this.$rootScope.$watch(()=>{
       // use angular.toJson to remove internal properties like $$hashKey
