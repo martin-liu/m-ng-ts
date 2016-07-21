@@ -88,6 +88,12 @@ var webpackConfig = {
               replacement: function(){
                 return configFile;
               }
+            },
+            {
+              pattern: /__ENV__/ig,
+              replacement: function(){
+                return env;
+              }
             }
           ]
         })

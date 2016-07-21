@@ -7,5 +7,6 @@ import {Constant} from "../config/constant.ts";
 let Config:any = config;
 Config.routes = routes;
 Config.intros = intros;
+Config.env = "__ENV__";
 
 export {Config, Constant};

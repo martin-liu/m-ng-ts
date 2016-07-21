@@ -13,8 +13,9 @@ const highchartsNg = require('highcharts-ng');
 
 declare var locache:any;
 
-angular.module(Config.name, [ngSanitize, 'config', uiBootstrap, 'restangular', highchartsNg])
-  .constant('Cache', Cache)
+const app = angular.module(Config.name, [ngSanitize, 'config', uiBootstrap, 'restangular', highchartsNg]);
+
+app.constant('Cache', Cache)
   .constant('_', _)
   .config(($provide, $httpProvider, RestangularProvider) => {
 
@@ -44,3 +45,7 @@ angular.module(Config.name, [ngSanitize, 'config', uiBootstrap, 'restangular', h
     BootstrapService.resolve();
     AppInitService.init();
   });
+
+if (Config.env == 'local') {
+  require('../local.ts')(app);
+}
