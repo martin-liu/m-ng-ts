@@ -33,7 +33,7 @@ var webpackConfig = {
   },
 
   output: {
-    path: __dirname + '/build',
+    path: __dirname + '/dist',
     filename: 'bundle.js'
   },
 
