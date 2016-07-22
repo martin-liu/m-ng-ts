@@ -21,3 +21,9 @@ gulp.task('init', [], function(){
     .pipe(rename('local.ts'))
     .pipe(gulp.dest('app'));
 });
+
+gulp.task('build', [], function(){
+  gulp.src('app/htaccess.dist')
+    .pipe(rename('.htaccess'))
+    .pipe(gulp.dest('build'));
+});

@@ -9,8 +9,8 @@
     "clean-docs": "rimraf docs/**/*",
     "clean-build": "rimraf build/**/*",
     "clean": "npm run clean-docs && npm run clean-build",
-    "build-prod": "npm run clean && webpack --prod --progress --colors",
-    "build-dev": "npm run clean && webpack --dev --progress --colors",
+    "build-prod": "npm run clean && webpack --prod --progress --colors && gulp build",
+    "build-dev": "npm run clean && webpack --dev --progress --colors && gulp build",
     "test": "karma start"
   },
   "keywords": [
