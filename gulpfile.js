@@ -25,5 +25,5 @@ gulp.task('init', [], function(){
 gulp.task('build', [], function(){
   gulp.src('app/htaccess.dist')
     .pipe(rename('.htaccess'))
-    .pipe(gulp.dest('build'));
+    .pipe(gulp.dest('dist'));
 });

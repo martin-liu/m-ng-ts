@@ -9,5 +9,6 @@ tmp
 .idea
 npm-debug.log
 build/
+dist/
 app/config/config.ts
 app/local.ts
