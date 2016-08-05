@@ -112,10 +112,6 @@ var webpackConfig = {
     new ngAnnotatePlugin({add: true}),
     new StringReplacePlugin(),
     new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
-    new webpack.SourceMapDevToolPlugin({
-      filename: '[file].map',
-      exclude: ['vendor.bundle.js']
-    }),
     new HtmlWebpackPlugin({
       filename: './index.html',
       template: './app/index.html',
@@ -134,10 +130,18 @@ var webpackConfig = {
 if (env == 'prod') {
   webpackConfig.plugins = webpackConfig.plugins.concat([
     new webpack.optimize.UglifyJsPlugin({
-    compress: {
-      warnings: false
-    }})
+      compress: {
+        warnings: false
+      }})
+  ]);
+} else {
+  webpackConfig.plugins = webpackConfig.plugins.concat([
+    new webpack.SourceMapDevToolPlugin({
+      filename: '[file].map',
+      exclude: ['vendor.bundle.js']
+    }),
   ]);
 }
+
 
 module.exports = webpackConfig;
