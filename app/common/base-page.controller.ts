@@ -44,7 +44,7 @@ export default class BasePageController {
     return new Promise( (resolve) => {
       NProgressService.start();
       this.initialize().then(()=>{
-        $scope.initialize = true;
+        $scope.initialized = true;
         NProgressService.done();
         // Intro
         if (Config.intro.enabled) {
