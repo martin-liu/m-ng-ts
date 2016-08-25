@@ -101,6 +101,11 @@ var webpackConfig = {
     ]
   },
 
+  tslint: {
+    emitErrors: true,
+    failOnHint: true
+  },
+
   postcss: function() {
     return [autoprefixer];
   },
