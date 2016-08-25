@@ -32,13 +32,13 @@
     <![endif]-->
 
   </head>
-  <body ng-animate="{enter: 'animated fadeInX'}" ngcloak="true" style="overflow-x: hidden">
+  <body ng-animate="{enter: 'animated fadeInX'}" ng-cloak style="overflow-x: hidden">
     <!-- HEADER -->
     <m-header mailto=""
               wiki=""></m-header>
 
     <!-- BODY -->
-    <div class="app animate-fade-left-big" ng-view></div>
+    <div class="app animate-fade-left-big" ng-class="{'hide':!initialized}" ng-view></div>
 
   </body>
 </html>
