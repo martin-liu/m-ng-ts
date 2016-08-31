@@ -20,6 +20,18 @@ Run `npm start`, this will start a web server on http://localhost:8888
 
 It's using **webpack-dev-server**, will auto compile files and reload page.
 
+### Add 3rd party libraries
+1. Check if the library supports NodeJS style `require`
+  * Install that library by `npm install --save xxx`
+  * Check library's `package.json` file, see if there's `main` attribute
+  * Check the file which `main` points to, search if there's `module.exports` code
+2. If it supports, then
+  * Add the name of library to `webpackConfig.entry.vendor` in `webpack.config.js`, this is for better compile performance in development
+  * Use `const xxx = require('xxx')` to use that library
+3. If the library not support NodeJS style `require`, then
+  * Remove it from `package.json`
+  * Save js file to `app/assets` folder and reference it in `app/index.html`
+
 ## Deployment
 `npm run deploy-dev` or `npm run deploy-prod`
 
