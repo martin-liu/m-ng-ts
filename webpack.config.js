@@ -5,7 +5,8 @@ var webpack = require('webpack'),
     autoprefixer = require('autoprefixer'),
     ngAnnotatePlugin = require('ng-annotate-webpack-plugin'),
     StringReplacePlugin = require('string-replace-webpack-plugin'),
-    CopyWebpackPlugin = require('copy-webpack-plugin');
+    CopyWebpackPlugin = require('copy-webpack-plugin'),
+    DashboardPlugin = require('webpack-dashboard/plugin');
 
 // env based config file
 var arg = process.argv[2];
@@ -128,7 +129,8 @@ var webpackConfig = {
         from: './app/assets',
         to: 'assets'
       }
-    ])
+    ]),
+    new DashboardPlugin()
   ]
 };
 

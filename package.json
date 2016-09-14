@@ -4,7 +4,7 @@
   "description": "Angular 1.5 & Typescript",
   "main": "app.js",
   "scripts": {
-    "start": "webpack-dev-server --content-base app/ --progress --colors --inline --hot --compress --history-api-fallback --port 8888",
+    "start": "webpack-dashboard -- webpack-dev-server --content-base app/ --progress --colors --inline --hot --compress --history-api-fallback --port 8888",
     "setup": "npm install && typings install && gulp init",
     "clean-docs": "rimraf docs/**/*",
     "clean-build": "rimraf build/**/*",
@@ -78,6 +78,7 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.13.1",
     "webpack-config": "^3.1.0",
+    "webpack-dashboard": "^0.1.8",
     "webpack-dev-server": "^1.14.1",
     "webpack-stream": "^3.1.0",
     "yargs": "^4.7.1"
