@@ -129,10 +129,13 @@ var webpackConfig = {
         from: './app/assets',
         to: 'assets'
       }
-    ]),
-    new DashboardPlugin()
+    ])
   ]
 };
+
+if (env == 'local') {
+  webpackConfig.plugins = webpackConfig.plugins.concat([new DashboardPlugin()]);
+}
 
 if (env == 'prod') {
   webpackConfig.plugins = webpackConfig.plugins.concat([
