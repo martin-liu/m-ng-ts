@@ -1,6 +1,17 @@
 import * as _ from 'lodash';
 import IntroService from './intro.service.ts';
 
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+
 export default class AppInitService {
   static $inject = ['$rootScope', '$window', '$http', '$q', 'Util', 'Config', 'Cache', 'Constant'];
   promises: Array<any>;
@@ -16,6 +27,23 @@ export default class AppInitService {
     this.promises = [];
   }
 
+  private saveUser(user) {
+    let nt = user.nt;
+    let email = user.email;
+    let firstName = user.firstName;
+    let lastName = user.lastName;
+    let displayName = lastName + ', ' + firstName;
+
+    if (nt) {
+      let user = {
+        nt, firstName, lastName, email, displayName,
+        label : displayName + '(' + nt + ')'
+      }
+      this.$rootScope.user = user;
+      localStorage.setItem('user', JSON.stringify(user));
+    }
+  }
+
   public initUser() {
     this.$rootScope.user = angular.fromJson(localStorage.getItem('user'));
     let defer = this.$q.defer();
@@ -24,25 +52,35 @@ export default class AppInitService {
         method: 'GET',
         url: document.location.href
       }).then((res) => {
-        let nt = res.headers('PF_AUTH_SUBJECT');
-        let email = res.headers('PF_AUTH_EMAIL');
-        let firstName = res.headers('PF_AUTH_FIRST');
-        let lastName = res.headers('PF_AUTH_LAST');
-        let displayName = lastName + ', ' + firstName;
+        let user = {
+          nt : res.headers('PF_AUTH_SUBJECT'),
+          email : res.headers('PF_AUTH_EMAIL'),
+          firstName : res.headers('PF_AUTH_FIRST'),
+          lastName : res.headers('PF_AUTH_LAST')
+        };
+        this.saveUser(user);
 
-        if (nt) {
-          let user ={
-            nt, firstName, lastName, email, displayName,
-            label : displayName + '(' + nt + ')'
-          }
-          this.$rootScope.user = user;
-          localStorage.setItem('user', JSON.stringify(user));
-        }
         return defer.resolve();
       }, (e) => defer.resolve());
     } else {
       defer.resolve();
     }
+
+    defer.promise.then(() => {
+      // read cookie if not get user info
+      if (!this.$rootScope.user || !this.$rootScope.user.nt) {
+        let nt = getCookie('ntlogin');
+        if (nt) {
+          let user = {
+            nt,
+            firstName : getCookie('firstname'),
+            lastName : getCookie('lastname')
+          };
+
+          this.saveUser(user);
+        }
+      }
+    });
     return defer.promise;
   }
 
