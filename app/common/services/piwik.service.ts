@@ -8,7 +8,7 @@ export default new class PiwikService {
       let pkBaseURL = Config.piwik.url;
       let app = Config.piwik.app;
       let prod = Config.piwik.prod;
-      let piwikTracker = Piwik.getTracker("#{pkBaseURL}/piwik.php", siteId);
+      let piwikTracker = Piwik.getTracker(`${pkBaseURL}/piwik.php`, siteId);
       piwikTracker.setCustomVariable(1, "User", username, "visit");
       piwikTracker.setCustomVariable(2, "App", app, "page");
       piwikTracker.setCustomVariable(3, "PageName", pagename, "page");
