@@ -105,6 +105,7 @@ export default class AppInitService {
   public init(){
     this.$rootScope.$on('$routeChangeSuccess', ($event, current) => {
       this.$rootScope.currentPage = current.name;
+      this.$rootScope.currentPageTrackingName = current.trackingName;
     });
 
     this.$rootScope.Util = this.Util;

@@ -52,7 +52,7 @@ export default class BasePageController {
         }
         // Piwik
         if (Config.piwik.enabled && $scope.user) {
-          PiwikService.init($scope.user.nt, $scope.currentPage);
+          PiwikService.init($scope.user.nt, $scope.currentPageTrackingName || $scope.currentPage);
         }
         resolve();
       });
