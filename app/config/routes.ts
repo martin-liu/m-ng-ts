@@ -5,6 +5,7 @@ export const routes:Array<Object> = [
     component: 'homePage',     // directive name
     params: {
       name: "home",
+      trackingName: "home_page",         // this is used for piwik tracking, if not specificed, then piwik will use `name`
       label: "Home"
     }
   },
