@@ -6,6 +6,7 @@ var webpack = require('webpack'),
     ngAnnotatePlugin = require('ng-annotate-webpack-plugin'),
     StringReplacePlugin = require('string-replace-webpack-plugin'),
     CopyWebpackPlugin = require('copy-webpack-plugin'),
+    WebpackMd5Hash = require('webpack-md5-hash'),
     DashboardPlugin = require('webpack-dashboard/plugin');
 
 // env based config file
@@ -35,7 +36,7 @@ var webpackConfig = {
 
   output: {
     path: __dirname + '/dist',
-    filename: 'bundle.js'
+    filename: '[name].bundle.js'
   },
 
   resolve: {
@@ -112,17 +113,17 @@ var webpackConfig = {
   },
 
   plugins: [
+    new WebpackMd5Hash(),
     new webpack.ProvidePlugin({
       jQuery: "jquery"
     }),
     new ngAnnotatePlugin({add: true}),
     new StringReplacePlugin(),
-    new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
+    new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
     new HtmlWebpackPlugin({
       filename: './index.html',
       template: './app/index.html',
-      inject: true,
-      hash: true
+      inject: true
     }),
     new CopyWebpackPlugin([
       {
@@ -138,6 +139,7 @@ if (env == 'local') {
 }
 
 if (env == 'prod') {
+  webpackConfig.output.filename = '[name].[chunkhash].bundle.js';
   webpackConfig.plugins = webpackConfig.plugins.concat([
     new webpack.optimize.UglifyJsPlugin({
       compress: {
