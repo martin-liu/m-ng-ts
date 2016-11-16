@@ -1,5 +1,3 @@
-import * as _ from 'lodash';
-
 export default class DomService {
   static siblings(el) {
     return [].filter.call(el.parentNode.children, function(child) {
@@ -44,7 +42,12 @@ export default class DomService {
     }
 
     let children = el.children;
-    let e = _.find(children, (d)=>func(d));
+    let e;
+    [].forEach.call(children, (d) => {
+      if(func(d)) {
+        e = d;
+      }
+    });
     if (e){
       return e;
     } else {
@@ -97,5 +100,52 @@ export default class DomService {
       event.initCustomEvent(eventName, true, true, data);
     }
     return el.dispatchEvent(event);
+  }
+
+  static createElement(html) {
+    let wrapper = document.createElement('div');
+    wrapper.innerHTML = html;
+    return wrapper.firstElementChild;
+  }
+
+  static hasClass(el, name) {
+    return new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)").test(el.className);
+  }
+
+  static addClass(el, name) {
+    if (!DomService.hasClass(el, name)) {
+      el.className = el.className ? [el.className, name].join(' ') : name;
+    }
+  }
+
+  static removeClass(el, name) {
+    if (DomService.hasClass(el, name)) {
+      let c = el.className;
+      el.className = c.replace(new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)", "g"), " ");
+    }
+  }
+
+  static toggleClass(el, name) {
+    if (DomService.hasClass(el, name)) {
+      DomService.removeClass(el, name);
+    } else {
+      DomService.addClass(el, name);
+    }
+  }
+
+  static getPosition(element) {
+    let xPosition = 0;
+    let yPosition = 0;
+
+    while(element) {
+      xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+      yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+      element = element.offsetParent;
+    }
+    return { x: xPosition, y: yPosition };
+  }
+
+  static insertAfter(newNode, referenceNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
   }
 }
