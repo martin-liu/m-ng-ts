@@ -230,36 +230,22 @@ export default class Util {
     return str.replace(/<[^>]*>?/g, '');
   }
 
-  waitUntil(func, check, interval, maxTime) {
-    let doWait;
-    if (interval == null) {
-      interval = 300;
-    }
-    if (maxTime == null) {
-      maxTime = 100;
-    }
-    doWait = function(time) {
-      let defer, ret;
-      defer = this.$q.defer();
-      if (time <= 0) {
-        defer.reject("exceed " + maxTime + " times check");
-      } else {
-        ret = func();
-        if (check(ret)) {
-          defer.resolve(ret);
+  waitUntil(func, check = (d) => !!d, interval = 300, maxTime = 100) {
+    let doWait = (time) => {
+      return new Promise((rs, rj) => {
+        if (time <= 0) {
+          rj("exceed " + maxTime + " times check");
         } else {
-          this.$timeout((function(_this) {
-            return function() {
-              return doWait(time - 1).then(function(ret) {
-                return defer.resolve(ret);
-              }, function(err) {
-                return defer.reject(err);
-              });
-            };
-          })(this), interval);
+          let ret = func();
+          if (check(ret)) {
+            rs(ret);
+          } else {
+            setTimeout(() => {
+              return doWait(time - 1).then(rs).catch(rj);
+            }, interval);
+          }
         }
-      }
-      return defer.promise;
+      });
     };
     return doWait(maxTime);
   }
