@@ -148,4 +148,35 @@ export default class DomService {
   static insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
   }
+
+
+  /*
+    process exclusive click event and dblclick event
+  */
+  static clicker(clickFunc, dblclickFunc, delay = 500) {
+    let clicks = 0;
+    let timer = null;
+    let isFunction = (f) => {
+      let n = Object.prototype.toString.call(f);
+      return "[object Function]"==n||"[object GeneratorFunction]"==n||"[object AsyncFunction]"==n||"[object Proxy]"==n;
+    }
+    return function() {
+      let args = arguments;
+      clicks += 1;
+      if (clicks === 1) {
+        return timer = setTimeout(() => {
+          clicks = 0;
+          if (isFunction(clickFunc)) {
+            return clickFunc.apply(this, args);
+          }
+        }, delay);
+      } else {
+        clicks = 0;
+        clearTimeout(timer);
+        if (isFunction(dblclickFunc)) {
+          return dblclickFunc.apply(this, args);
+        }
+      }
+    };
+  }
 }
