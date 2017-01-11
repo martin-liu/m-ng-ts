@@ -58,6 +58,14 @@ var webpackConfig = {
 
     loaders: [
       {
+        test: require.resolve("lodash"),
+        loader: "imports?define=>null" // Lodash will set `_` to global when there's define (AMD)
+      },
+      {
+        test: require.resolve("restangular"),
+        loader: "imports?_=lodash"
+      },
+      {
         test: require.resolve("./app/lib/locache.js"),
         loader: "imports?this=>window"
       },
