@@ -1,6 +1,6 @@
 {
   "name": "m-ng-ts",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Angular 1.5 & Typescript",
   "main": "app.js",
   "scripts": {
@@ -31,7 +31,7 @@
     "protractor",
     "angular2.0"
   ],
-  "author": "Daiyan Alamgir",
+  "author": "Martin Liu",
   "license": "ISC",
   "devDependencies": {
     "angular-mocks": "^1.5.6",
@@ -76,9 +76,9 @@
     "typescript": "^1.8.10",
     "typings": "^0.7.12",
     "url-loader": "^0.5.7",
-    "webpack": "^1.13.1",
+    "webpack": "^1.14.0",
     "webpack-config": "^3.1.0",
-    "webpack-dashboard": "^0.1.8",
+    "webpack-dashboard": "^0.2.1",
     "webpack-dev-server": "^1.14.1",
     "webpack-md5-hash": "0.0.5",
     "webpack-stream": "^3.1.0",
