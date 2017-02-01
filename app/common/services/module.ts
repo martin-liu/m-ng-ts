@@ -1,3 +1,4 @@
+import * as angular from 'angular';
 import {Config} from '../config.ts';
 import AppInitService from '../services/app-init.service.ts';
 import Util from '../services/util.service.ts';

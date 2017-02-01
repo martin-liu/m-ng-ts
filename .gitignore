@@ -2,7 +2,6 @@ logs/*
 !.gitkeep
 node_modules/
 bower_components/
-typings/
 docs/
 tmp
 .DS_Store
@@ -12,3 +11,6 @@ build/
 dist/
 app/config/config.ts
 app/local.ts
+
+# testing
+/coverage/

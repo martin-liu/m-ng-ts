@@ -1,20 +1,21 @@
 'use strict';
 
 var webpack = require('webpack'),
+    path = require('path'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
+    precss = require('precss'),
     autoprefixer = require('autoprefixer'),
     ngAnnotatePlugin = require('ng-annotate-webpack-plugin'),
     StringReplacePlugin = require('string-replace-webpack-plugin'),
     CopyWebpackPlugin = require('copy-webpack-plugin'),
-    WebpackMd5Hash = require('webpack-md5-hash'),
-    DashboardPlugin = require('webpack-dashboard/plugin');
+    WebpackMd5Hash = require('webpack-md5-hash');
 
 // env based config file
 var arg = process.argv[2];
 var env;
-if (arg === '--dev'){
+if (arg === '--env=dev'){
   env = 'dev';
-} else if (arg === '--prod'){
+} else if (arg === '--env=prod'){
   env = 'prod';
 } else {
   env = 'local';
@@ -40,7 +41,7 @@ var webpackConfig = {
   },
 
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.ts', '.js']
+    extensions: ['.webpack.js', '.web.js', '.ts', '.js']
   },
 
   node: {
@@ -49,25 +50,53 @@ var webpackConfig = {
 
   module: {
 
-    preloaders: [
+    rules: [
       {
-        test: /\.ts$/,
-        loader: 'tslint'
-      }
-    ],
+        enforce: 'pre',
+        test: /\.tsx?$/,
+        loader: 'tslint-loader',
+        exclude: /(node_modules)/,
+        options: {
+          emitErrors: true,
+          failOnHint: true,
+          configuration: {
+            rules: {
+              quotemark: false
+            }
+          }
+        }
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          'style-loader',
+          'css-loader?importLoaders=1',
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: function () {
+                return [
+                  require('precss'),
+                  require('autoprefixer')
+                ];
+              }
+            }
+          },
+          'sass-loader'
+        ]
+      },
 
-    loaders: [
       {
         test: require.resolve("lodash"),
-        loader: "imports?define=>null" // Lodash will set `_` to global when there's define (AMD)
+        loader: "imports-loader?define=>null" // Lodash will set `_` to global when there's define (AMD)
       },
       {
         test: require.resolve("restangular"),
-        loader: "imports?_=lodash"
+        loader: "imports-loader?_=lodash"
       },
       {
         test: require.resolve("./app/lib/locache.js"),
-        loader: "imports?this=>window"
+        loader: "imports-loader?this=>window"
       },
       {
         test: /\.html$/,
@@ -78,16 +107,16 @@ var webpackConfig = {
         loader: 'ts-loader'
       },
       {
-        test: /\.scss$/,
-        loader: 'style!css!postcss!sass'
-      },
-      {
         test: /bootstrap-sass\/assets\/javascripts\//,
-        loader: 'imports?jQuery=jquery'
+        loader: 'imports-loader?jQuery=jquery'
       },
       {
-        test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
-        loader: 'file'
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: "url-loader?limit=10000&mimetype=application/font-woff"
+      },
+      {
+        test: /\.(eot|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
+        loader: 'file-loader'
       },
       {
         test: require.resolve("./app/common/config.ts"),
@@ -111,13 +140,8 @@ var webpackConfig = {
     ]
   },
 
-  tslint: {
-    emitErrors: true,
-    failOnHint: true
-  },
-
-  postcss: function() {
-    return [autoprefixer];
+  performance: {
+    hints: false
   },
 
   plugins: [
@@ -127,14 +151,19 @@ var webpackConfig = {
     }),
     new ngAnnotatePlugin({add: true}),
     new StringReplacePlugin(),
-    new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
-    // extract webpack runtime and module manifest to its own file in order to
-    // prevent vendor hash from being updated whenever app bundle is updated
-    new webpack.optimize.CommonsChunkPlugin({name: 'manifest', chunks: ['vendor']}),
+    new webpack.optimize.CommonsChunkPlugin({name: ['vendor', 'manifest']}),
     new HtmlWebpackPlugin({
       filename: './index.html',
       template: './app/index.html',
-      inject: true
+      inject: true,
+      chunksSortMode: function(a, b) {
+        var map = {
+          manifest: 1,
+          vendor: 2,
+          app: 3
+        };
+        return map[a.names[0]] - map[b.names[0]];
+      }
     }),
     new CopyWebpackPlugin([
       {
@@ -145,12 +174,11 @@ var webpackConfig = {
   ]
 };
 
-if (env == 'local') {
-  webpackConfig.plugins = webpackConfig.plugins.concat([new DashboardPlugin()]);
+if (env != 'local') {
+  webpackConfig.output.filename = '[name].[chunkhash].bundle.js';
 }
 
 if (env == 'prod') {
-  webpackConfig.output.filename = '[name].[chunkhash].bundle.js';
   webpackConfig.plugins = webpackConfig.plugins.concat([
     new webpack.optimize.UglifyJsPlugin({
       compress: {

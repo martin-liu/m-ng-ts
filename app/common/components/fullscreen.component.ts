@@ -1,3 +1,4 @@
+import * as angular from 'angular';
 import {BaseComponent} from "../base.component.ts";
 import BindingType from "../binding-types.ts";
 import DomService from "../services/dom.service.ts";

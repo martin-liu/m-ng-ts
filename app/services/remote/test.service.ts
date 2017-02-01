@@ -1,3 +1,4 @@
+import * as angular from 'angular';
 import {Config} from '../../common/config.ts';
 import BaseRemoteService from '../../common/remote.service.ts';
 

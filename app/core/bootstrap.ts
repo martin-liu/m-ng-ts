@@ -1,4 +1,6 @@
-require('bootstrap-loader');
+import 'bootstrap-loader';
+
+import * as angular from 'angular';
 import {Config} from '../common/config.ts';
 
 import '../lib/lib.scss';

@@ -1,3 +1,4 @@
+import * as angular from 'angular';
 import {Config} from '../config.ts';
 import LoadingComponent from './loading.component.ts';
 import FullscreenComponent from './fullscreen.component.ts';

@@ -5,11 +5,10 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "lib": ["dom", "es2015.promise", "es5"]
   },
   "exclude": [
-    "typings/browser.d.ts",
-    "typings/browser",
     "node_modules"
   ]
 }

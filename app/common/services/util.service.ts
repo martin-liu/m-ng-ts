@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+import * as _ from 'lodash';
 import DomService from './dom.service.ts';
 
 export default class Util {
@@ -281,16 +283,16 @@ export default class Util {
     return doRecur(maxTime);
   }
 
-  deepExtend() {
+  deepExtend(...ags: any[]) {
     let args, target;
-    if (arguments.length < 1 || typeof arguments[0] !== "object") {
+    if (ags.length < 1 || typeof ags[0] !== "object") {
       return false;
     }
-    if (arguments.length < 2) {
-      return arguments[0];
+    if (ags.length < 2) {
+      return ags[0];
     }
-    target = arguments[0];
-    args = Array.prototype.slice.call(arguments, 1);
+    target = ags[0];
+    args = Array.prototype.slice.call(ags, 1);
     args.forEach((function(_this) {
       return function(obj) {
         let clone, key, src, val, _results;
