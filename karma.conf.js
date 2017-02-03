@@ -1,4 +1,12 @@
-var WebpackConfig = require('webpack-config');
+var WebpackConfig = require('webpack-config'),
+    ngAnnotatePlugin = require('ng-annotate-webpack-plugin'),
+    StringReplacePlugin = require('string-replace-webpack-plugin');
+
+var arg = process.argv[3];
+var singleRun = false;
+if (arg === '--singleRun'){
+  singleRun = true;
+}
 
 // Karma configuration
 // Generated on Wed Dec 30 2015 11:13:38 GMT-0500 (EST)
@@ -7,12 +15,20 @@ module.exports = function (config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '.',
+    basePath: '',
 
     files: [
-      'app/**/*.spec.ts'
+      {
+        pattern: 'app/test.index.ts',
+        watched: false,
+        included: true,
+        served: true
+      }
     ],
 
+    mime: {
+      'text/x-typescript': ['ts','tsx']
+    },
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
@@ -28,7 +44,7 @@ module.exports = function (config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'dots'],
+    reporters: ['progress', 'dots', 'coverage', 'remap-coverage'],
 
 
     // web server port
@@ -55,17 +71,25 @@ module.exports = function (config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
+    singleRun: singleRun,
 
     // Concurrency level
     // how many browser should be started simultaneous
     concurrency: Infinity,
 
     preprocessors: {
-      'app/**/*.spec.ts': ['webpack']
+      'app/test.index.ts': ['webpack', 'sourcemap']
     },
 
-    webpack: new WebpackConfig().extend("./webpack.config"),
+    webpack: (function() {
+      var config = new WebpackConfig().extend("webpack.config");
+      config.plugins = [
+        new ngAnnotatePlugin({add: true}),
+        new StringReplacePlugin()
+      ];
+      config.watch = true;
+      return config;
+    })(),
 
     webpackMiddleware: {
       noInfo: true
@@ -75,16 +99,19 @@ module.exports = function (config) {
       require('karma-mocha'),
       require('karma-chai'),
       require('karma-phantomjs-launcher'),
-      require('karma-webpack')
+      require('karma-webpack'),
+      require('karma-coverage'),
+      require('karma-remap-coverage'),
+      require('karma-sourcemap-loader')
     ],
 
     coverageReporter: {
-      dir: 'coverage/',
-      includeAllSources: true,
-      reporters: [
-        { type : 'html', subdir: 'html' },
-        { type: 'lcov', subdir: 'lcov' }
-      ]
+      type: 'in-memory'
+    },
+    remapCoverageReporter: {
+      'text-summary': null,
+      json: './coverage/coverage.json',
+      html: './coverage/html'
     }
   });
 };

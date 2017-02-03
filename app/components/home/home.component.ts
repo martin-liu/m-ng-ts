@@ -5,7 +5,7 @@ import {Config} from '../../common/config.ts';
 import {BaseComponent} from "../../common/base.component.ts";
 import BasePageController from '../../common/base-page.controller.ts';
 
-class HomePageController extends BasePageController {
+export class HomePageController extends BasePageController {
   static $inject = ['$timeout', 'TestRemoteService'];
   constructor(private $timeout, private TestRemoteService){
     super()
@@ -22,7 +22,7 @@ class HomePageController extends BasePageController {
     this.bindHighcharts();
 
     // ajax call
-    this.TestRemoteService.testMethod({a: 'haha'})
+    this.TestRemoteService.testMethod({a: 'test'})
       .then((data) => {
         console.log(data);
       }, (err) => {

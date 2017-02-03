@@ -1,32 +1,41 @@
-import '../../core/tests.ts';
-import {chai} from '../../core/tests.ts';
+import {expect, assert} from 'chai';
+import {Config} from '../../common/config';
+const sinon = require('sinon');
+const { suite, test, slow, timeout, skip, only } = require("mocha-typescript");
+import * as angular from 'angular';
 
-var expect = chai.expect;
+import {HomePageController} from './home.component';
 
-describe('Unit tests for home component', () => {
+@suite("Test HomeComponent")
+class TestHomeComponent {
+  private vm:any;
+  private vmSpy:any;
 
-    describe('2 + 4', () => {
+  constructor() {
+  }
 
-        it('should be 6', (done) => {
-            expect(2 + 4).to.equal(6);
-            done();
-        });
+  // instance before/after will be called before/after each test
+  before() {
+    angular.mock.module(Config.name);
+    angular.mock.inject(($rootScope, $controller, $timeout, TestRemoteService) => {
+      let scope = $rootScope.$new();
 
-        it('should not be 7', (done) => {
-            expect(2 + 4).to.not.equals(7);
-            done();
-        });
+      this.vm = new HomePageController($timeout, TestRemoteService);
+    })
+  }
 
-        it('should be 10', (done) => {
-            expect(6 + 4).to.equal(10);
-            done();
-        });
+  after() {
+  }
 
-        it('should not be 20', (done) => {
-            expect(10 + 10).to.not.equal(20);
-            done();
-        });
+  // static before/after will be called before/after all tests
+  static before() {
+  }
 
-    });
+  @test("should pass")
+  testTest() {
+    let spy = sinon.spy(this.vm, 'bindView');
+    assert(spy.calledOnce);
+    spy.restore();
+  }
 
-});
+}

@@ -11,6 +11,7 @@ build/
 dist/
 app/config/config.ts
 app/local.ts
+dll/
 
 # testing
 /coverage/

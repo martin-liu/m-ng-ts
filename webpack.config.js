@@ -29,10 +29,8 @@ if (env != 'local') {
 var webpackConfig = {
 
   entry: {
-    app: './app/core/bootstrap.ts',
-    vendor: ['angular', 'angular-route', 'angular-sanitize', 'angular-ui-bootstrap', 'highcharts',
-             'highcharts-ng', 'lodash', 'restangular', 'nprogress', 'intro.js', './app/lib/locache.js',
-             'bootstrap-loader', './app/lib/lib.scss']
+    main: './app/core/bootstrap.ts',
+    vendor: require('./webpack.vendor.js')
   },
 
   output: {
@@ -41,7 +39,11 @@ var webpackConfig = {
   },
 
   resolve: {
-    extensions: ['.webpack.js', '.web.js', '.ts', '.js']
+    extensions: ['.webpack.js', '.web.js', '.ts', '.js'],
+    alias: {
+      // for testing
+      "mocha-typescript": path.resolve(__dirname, 'app/lib/mocha-typescript.js')
+    }
   },
 
   node: {
@@ -160,7 +162,7 @@ var webpackConfig = {
         var map = {
           manifest: 1,
           vendor: 2,
-          app: 3
+          main: 3
         };
         return map[a.names[0]] - map[b.names[0]];
       }
