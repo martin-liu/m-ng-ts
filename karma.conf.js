@@ -1,4 +1,5 @@
-var WebpackConfig = require('webpack-config'),
+var webpack = require('webpack'),
+    WebpackConfig = require('webpack-config'),
     ngAnnotatePlugin = require('ng-annotate-webpack-plugin'),
     StringReplacePlugin = require('string-replace-webpack-plugin');
 
@@ -34,6 +35,11 @@ module.exports = function (config) {
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['mocha', 'chai'],
 
+    client: {
+      mocha: {
+        timeout: 5000
+      }
+    },
 
     // list of files to exclude
     exclude: [
@@ -44,7 +50,7 @@ module.exports = function (config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'dots', 'coverage', 'remap-coverage'],
+    reporters: ['progress', 'karma-remap-istanbul'],
 
 
     // web server port
@@ -85,8 +91,20 @@ module.exports = function (config) {
       var config = new WebpackConfig().extend("webpack.config");
       config.plugins = [
         new ngAnnotatePlugin({add: true}),
-        new StringReplacePlugin()
+        new StringReplacePlugin(),
+        new webpack.SourceMapDevToolPlugin({
+          filename: '[file].map',
+          exclude: ['vendor.bundle.js']
+        })
       ];
+
+      config.module.rules.push({
+        test: /app\/.+\.ts$/,
+        exclude: /(node_modules|\.spec\.ts$|test\.index\.ts)/,
+        loader: 'sourcemap-istanbul-instrumenter-loader?force-sourcemap=true',
+        enforce: 'post'
+      });
+
       config.watch = true;
       return config;
     })(),
@@ -95,23 +113,22 @@ module.exports = function (config) {
       noInfo: true
     },
 
+    customContextFile: './app/test.index.html',
+
     plugins: [
       require('karma-mocha'),
       require('karma-chai'),
       require('karma-phantomjs-launcher'),
       require('karma-webpack'),
-      require('karma-coverage'),
-      require('karma-remap-coverage'),
-      require('karma-sourcemap-loader')
+      require('karma-sourcemap-loader'),
+      require('karma-remap-istanbul')
     ],
 
-    coverageReporter: {
-      type: 'in-memory'
-    },
-    remapCoverageReporter: {
-      'text-summary': null,
-      json: './coverage/coverage.json',
-      html: './coverage/html'
+    remapIstanbulReporter: {
+      reports: {
+        lcovonly: './coverage/lcov.info',
+        'text-summary': null
+      }
     }
   });
 };

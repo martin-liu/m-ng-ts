@@ -1,0 +1,63 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html xmlns:ng="http://angularjs.org" xmlns:bg="ignored" id="ng-app" class="no-js">
+  <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title ng-bind-template="{{config.title}}"></title>
+    <link rel="shortcut icon" href="assets/favicon.ico">
+    <base href="/">
+
+    <!-- This has to be at the top to make it works in IE   -->
+    <!--[if lte IE 8]>
+      <script src="js/lib/json2.js"></script>
+      <script>
+      document.createElement('m-loading');
+      document.createElement('m-pagination');
+      document.createElement('m-no-result');
+      document.createElement('m-dynamic-tpl');
+      </script>
+    <![endif]-->
+
+    <!--[if lte IE 7]>
+      <script type="text/javascript">
+      window.unSupport = true
+      location.href = 'notsupport.html';
+      </script>
+    <![endif]-->
+
+  </head>
+  <body ng-animate="{enter: 'animated fadeInX'}" ng-cloak style="overflow-x: hidden">
+    <!-- HEADER -->
+    <m-header mailto=""
+              wiki=""></m-header>
+
+    <!-- BODY -->
+    <div class="app animate-fade-left-big" ng-class="{'hide':!initialized}" ng-view></div>
+
+
+    <!-- The scripts need to be in the body DOM element, as some test running frameworks need the body
+         to have already been created so they can insert their magic into it. For example, if loaded
+         before body, Angular Scenario test framework fails to find the body and crashes and burns in
+         an epic manner. -->
+    <script src="context.js"></script>
+    <script type="text/javascript">
+     // Configure our Karma and set up bindings
+     %CLIENT_CONFIG%
+     window.__karma__.setupContext(window);
+     // All served files with the latest timestamps
+     %MAPPINGS%
+    </script>
+    <!-- Dynamically replaced with <script> tags -->
+    %SCRIPTS%
+    <script type="text/javascript">
+     window.__karma__.loaded();
+    </script>
+
+  </body>
+</html>
