@@ -4,7 +4,7 @@ import PiwikService from './services/piwik.service.ts';
 import IntroService from './services/intro.service.ts';
 import NProgressService from './services/nprogress.service.ts';
 import BootstrapService from './services/bootstrap.service.ts';
-
+import Promise from './services/promise.service.ts';
 export default class BasePageController {
   state: any;
   data: any;
