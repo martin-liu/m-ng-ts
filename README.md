@@ -26,7 +26,7 @@ It's using **webpack-dev-server**, will auto compile files and reload page.
   * Check library's `package.json` file, see if there's `main` attribute
   * Check the file which `main` points to, search if there's `module.exports` code
 2. If it supports, then
-  * Add the name of library to `webpackConfig.entry.vendor` in `webpack.config.js`, this is for better compile performance in development
+  * Add the name of library to `webpack.vendor.js`, this is for better compile performance in development
   * Use `const xxx = require('xxx')` to use that library
 3. If the library not support NodeJS style `require`, then
   * Remove it from `package.json`

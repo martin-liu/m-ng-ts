@@ -178,6 +178,10 @@ var webpackConfig = {
 
 if (env != 'local') {
   webpackConfig.output.filename = '[name].[chunkhash].bundle.js';
+  webpackConfig.plugins.push(new webpack.DllReferencePlugin({
+    context: __dirname,
+    manifest: require('./dist/manifest.json')
+  }));
 }
 
 if (env == 'prod') {
