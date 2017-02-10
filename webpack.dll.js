@@ -27,6 +27,9 @@ module.exports = {
   },
   module: baseConfig.module,
   plugins: [
+    new webpack.ProvidePlugin({
+      jQuery: "jquery"
+    }),
     new webpack.DllPlugin({
       path: './app/assets/dll/[name]-manifest.json',
       name: '[name]_[chunkhash]',
