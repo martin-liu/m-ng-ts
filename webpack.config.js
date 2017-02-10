@@ -1,6 +1,7 @@
 'use strict';
 
 var webpack = require('webpack'),
+    fs = require('fs'),
     path = require('path'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     precss = require('precss'),
@@ -29,8 +30,7 @@ if (env != 'local') {
 var webpackConfig = {
 
   entry: {
-    main: './app/core/bootstrap.ts',
-    vendor: require('./webpack.vendor.js')
+    main: './app/core/bootstrap.ts'
   },
 
   output: {
@@ -118,7 +118,7 @@ var webpackConfig = {
       },
       {
         test: /\.(eot|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
-        loader: 'file-loader'
+        loader: 'url-loader?limit=10000'
       },
       {
         test: require.resolve("./app/common/config.ts"),
@@ -176,12 +176,31 @@ var webpackConfig = {
   ]
 };
 
-if (env != 'local') {
+if (env == 'local') {
+  // use dll only in local env
+  var manifest = './app/assets/dll/vendor-manifest.json';
+  if (fs.existsSync(manifest)) {
+    webpackConfig.plugins = webpackConfig.plugins.concat([
+      new webpack.DllReferencePlugin({
+        context: __dirname,
+        manifest: require(manifest)
+      }),
+      {
+        // add dll.js to html
+        apply: function(compiler) {
+          compiler.plugin('compilation', function(compilation) {
+            compilation.plugin('html-webpack-plugin-before-html-processing', function(htmlPluginData, callback) {
+              htmlPluginData.html = htmlPluginData.html.replace('</body>', '<script src="assets/dll/vendor.dll.js"></script></body>');
+              callback(null, htmlPluginData);
+            });
+          });
+        }
+      }
+    ]);
+  }
+} else {
+  webpackConfig.entry.vendor = require('./webpack.vendor.js');
   webpackConfig.output.filename = '[name].[chunkhash].bundle.js';
-  webpackConfig.plugins.push(new webpack.DllReferencePlugin({
-    context: __dirname,
-    manifest: require('./dist/manifest.json')
-  }));
 }
 
 if (env == 'prod') {
