@@ -164,7 +164,7 @@ var webpackConfig = {
           vendor: 2,
           main: 3
         };
-        return map[a.names[0]] - map[b.names[0]];
+        return (map[a.names[0]] || 9) - (map[b.names[0]] || 9);
       }
     }),
     new CopyWebpackPlugin([
