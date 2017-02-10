@@ -1,3 +1,4 @@
+require('es6-promise').polyfill();
 import 'bootstrap-loader';
 
 import * as angular from 'angular';

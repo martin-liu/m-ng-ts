@@ -1,4 +1,3 @@
-require('es6-promise').polyfill();
 import './core/bootstrap';
 import 'angular-mocks';
 
