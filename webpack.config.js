@@ -121,6 +121,7 @@ var webpackConfig = {
         loader: 'url-loader?limit=10000'
       },
       {
+        enforce: 'pre',
         test: require.resolve("./app/common/config.ts"),
         loader: StringReplacePlugin.replace({
           replacements: [
