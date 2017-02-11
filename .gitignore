@@ -16,3 +16,4 @@ dll/
 
 # testing
 /coverage/
+.vscode
