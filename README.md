@@ -2,7 +2,7 @@
 Angular 1.5 & Typescript with webpack.
 
 ## Setup
-1. Install git, nodejs(recommend >=5.x)
+1. Install git, nodejs(recommend >=5.x). **Optional**: You can install `yarn` to replace the usage of `npm`
 2. If you already have a repository
 
   ```

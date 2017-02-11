@@ -1,3 +1,4 @@
+yarn.lock
 logs/*
 !.gitkeep
 node_modules/
