@@ -92,6 +92,9 @@ module.exports = function (config) {
       config.plugins = [
         new ngAnnotatePlugin({add: true}),
         new StringReplacePlugin(),
+        new webpack.ProvidePlugin({
+          jQuery: "jquery"
+        }),
         new webpack.SourceMapDevToolPlugin({
           filename: '[file].map',
           exclude: ['vendor.bundle.js']
