@@ -51,7 +51,7 @@ export default class AppInitService {
     if (!this.$rootScope.user && this.Config.PFSSO && this.Config.PFSSO.enabled) {
       this.$http({
         method: 'GET',
-        url: document.location.href
+        url: document.location.href + '?t=' + new Date().getTime() // in case returning 304
       }).then((res) => {
         let user = {
           nt : res.headers('PF_AUTH_SUBJECT'),
